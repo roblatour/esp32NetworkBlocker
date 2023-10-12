@@ -126,6 +126,8 @@ bool applyAllRules() {
   //  true : rules were applied
   //  false: rules were not applied
 
+   Serial.print("Applying changes ... ");
+
   bool returnValue = false;
   const char* applyRequest = "/api/firewall/filter/apply";
 
@@ -152,6 +154,11 @@ bool applyAllRules() {
   };
 
   httpClient.end();
+
+  if (returnValue)
+    Serial.println("changes applied");
+  else
+    Serial.println("applying changes failed");
 
   return returnValue;
 }
@@ -207,6 +214,7 @@ bool alignAllOPNsenseRules() {
   // false: problem allinging values
 
   bool returnValue = true;
+  bool applyRequired = false;
 
   const char* getAllRulesRequest = "/api/firewall/filter/searchRule/";
 
@@ -279,9 +287,10 @@ bool alignAllOPNsenseRules() {
 
               bool changeSucceeded = enableRule(API_RULES[APIRuleToCheck], false);
 
-              if (changeSucceeded)
+              if (changeSucceeded) {
                 Serial.print("its status was changed to disabled");
-              else
+                applyRequired = true;
+              } else
                 Serial.print("failed to change its status to disabled");
 
               returnValue = returnValue && changeSucceeded;
@@ -295,9 +304,10 @@ bool alignAllOPNsenseRules() {
 
               bool changeSucceeded = enableRule(API_RULES[APIRuleToCheck], true);
 
-              if (changeSucceeded)
+              if (changeSucceeded) {
                 Serial.print("its status was changed to enabled");
-              else
+                applyRequired = true;
+              } else
                 Serial.print("failed to change its status to enabled");
 
               returnValue = returnValue && changeSucceeded;
@@ -329,6 +339,9 @@ bool alignAllOPNsenseRules() {
   };
 
   httpClient.end();
+
+  if (applyRequired)
+    applyAllRules();
 
   return returnValue;
 };
