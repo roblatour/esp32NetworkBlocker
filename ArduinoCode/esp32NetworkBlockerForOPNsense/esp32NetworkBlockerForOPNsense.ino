@@ -119,19 +119,6 @@ bool enableRule(const char* ruleUUID, bool ruleShouldBeEnabled) {
   return returnValue;
 }
 
-// OPNsense API call to enable (or disable) all rules
-bool enableAllRules(bool rulesShouldBeEnabled) {
-
-  bool returnValue = true;
-
-  int numberOfAPIRules = sizeof(API_RULES) / sizeof(API_RULES[0]);
-
-  for (int x = 0; x < numberOfAPIRules; x++)
-    returnValue = returnValue && (enableRule(API_RULES[x], rulesShouldBeEnabled));
-
-  return returnValue;
-}
-
 // OPNsense API call to apply all rule changes
 bool applyAllRules() {
 
@@ -235,16 +222,31 @@ bool alignAllOPNsenseRules() {
 
   if (statusCode == HTTP_CODE_OK) {
 
-    String payload = httpClient.getString();
-    // Serial.println(payload);
+    //String payload = httpClient.getString();
+    //Serial.println(payload);
 
     // Parse response
     DynamicJsonDocument doc(32768);
     deserializeJson(doc, httpClient.getStream());
 
-    int numberOfOPNsenseAutomationRules = doc["rowcount"].as<int>();
+    int numberOfOPNsenseAutomationRules = doc["rowCount"].as<int>();
 
     int numberOfAPIRules = sizeof(API_RULES) / sizeof(API_RULES[0]);
+
+    Serial.println("");
+
+    if (networkBlockingIsActive)
+      Serial.println("Emergency shutdown is enabled");
+    else
+      Serial.println("Emergency shutdown is disabled");
+
+    Serial.println("Aligning rules");
+
+    Serial.print("Number of OPNsense - Firewall - Filter - Automation rules: ");
+    Serial.println(numberOfOPNsenseAutomationRules);
+
+    Serial.print("Number of API rules defined in the secret_settings.h file: ");
+    Serial.println(numberOfAPIRules);
 
     // look up each API rule in the retrieved OPNSense API rules, and if any need to be changed to align to the networkBlockingIsActive flag then do that now
     bool matchFound;
@@ -259,25 +261,70 @@ bool alignAllOPNsenseRules() {
 
         if (String(API_RULES[APIRuleToCheck]) == OPNsenseRuleUUID) {
 
+          Serial.print("rule id: ");
+          Serial.print(API_RULES[APIRuleToCheck]);
+          Serial.print(" matched, its current status is ");
+
           matchFound = true;
 
           if (doc["rows"][OPNsenseRulesToCheck]["enabled"].as<int>() == enabled) {
 
-            if (!networkBlockingIsActive)
-              returnValue = returnValue && (enableRule(API_RULES[APIRuleToCheck], false));  // rule is currently enabled but it needs to be disabled, disable it now
+            Serial.print("enabled; ");
+
+            if (networkBlockingIsActive) {
+
+              Serial.print("no change required");
+
+            } else {
+
+              bool changeSucceeded = enableRule(API_RULES[APIRuleToCheck], false);
+
+              if (changeSucceeded)
+                Serial.print("its status was changed to disabled");
+              else
+                Serial.print("failed to change its status to disabled");
+
+              returnValue = returnValue && changeSucceeded;
+            };
 
           } else {
 
-            if (networkBlockingIsActive)
-              returnValue = returnValue && (enableRule(API_RULES[APIRuleToCheck], true));  // rule is currently disabled but it needs to be enabled, enable it now
+            Serial.print("disabled; ");
+
+            if (networkBlockingIsActive) {
+
+              bool changeSucceeded = enableRule(API_RULES[APIRuleToCheck], true);
+
+              if (changeSucceeded)
+                Serial.print("its status was changed to enabled");
+              else
+                Serial.print("failed to change its status to enabled");
+
+              returnValue = returnValue && changeSucceeded;
+
+            } else {
+
+              Serial.print("no change required");
+            };
           };
+
+          Serial.println("");
           break;
         };
+      };
 
+      if (!matchFound) {
+        Serial.print("rule id: ");
+        Serial.print(String(API_RULES[APIRuleToCheck]));
+        Serial.println(" was defined in the secret_settings.h file but not within the OPNsense - Firewall - Filter - Automation rules");
         returnValue = false;  // a rule defined in this program could not be matched to an existing OPNsense rule
       };
     }
   } else {
+
+    Serial.print("Status code: ");
+    Serial.print(statusCode);
+    Serial.print(" returned from httpClient.GET()");
     returnValue = false;
   };
 
@@ -791,7 +838,7 @@ void refreshNetworkLockDisplay() {
     int tw2 = (displayWidth - (int)tft.textWidth(blockMessage2)) / 2;
     int th = horizontalOffset + lineHeight * 4;
 
-    if (networkBlockingIsActive) { 
+    if (networkBlockingIsActive) {
 
       if (flashText) {
         tft.setTextColor(TFT_BLACK);  // clear block message 2
@@ -871,16 +918,8 @@ void activateNetworkBlockingAsRequired() {
 
     everyThingIsAsItShouldBe = alignAllOPNsenseRules();
 
-    if (everyThingIsAsItShouldBe) {
-
-      if (networkBlockingIsActive)
-        Serial.println("Emergency shutdown is enabled");
-      else
-        Serial.println("Emergency shutdown is disabled");
-    } else {
-
+    if (!everyThingIsAsItShouldBe)
       Serial.println("Changes needed in support of the emergency shutdown status failed");
-    };
   };
 }
 
