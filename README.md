@@ -2,7 +2,7 @@
 
 **ESP32 Network Blocker \- Internet Kill Switch**
 
-**v1 released October 9, 2023**
+**v2 released Feb 18, 2026**
 
 Wouldn't it be great to have an Emergency Stop switch for your network?   With it you could lock out your kids from the internet, shut down access for a short while and bring it back up quickly without needing to reboot anything, or cut off those foreign state actors who are hacking into your network :-)
 
@@ -63,5 +63,5 @@ Well, here are two separate open source DIY projects to build your own internet 
  To help support esp32NetworkBlocker, or to just say thanks, you're welcome to 'buy me a coffee'<br><br>
 [<img alt="buy me  a coffee" width="200px" src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" />](https://www.buymeacoffee.com/roblatour)
 * * *
-Copyright © 2024 Rob Latour
+Copyright © 2026 Rob Latour
 * * *   
