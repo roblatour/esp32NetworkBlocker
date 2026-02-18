@@ -36,7 +36,7 @@ Well, here are two separate open source DIY projects to build your own internet 
 | **To add an optional remote switch:** |     |     |
 | +1 x ESP32 Devkit V1 (30) pin |     | [Arduino IDE](https://www.arduino.cc/en/software) |
 | +1 x Emergency Stop Button |     |     |
-| 1 x USB power source |     | wires (use 22 gauge for connecting RJ45 terminals),  <br>heat shrink tubing or electrical tape, a soldering iron, solder and flux |
+| 1 x USB power source |     | wires (for connecting terminals),  <br>heat shrink tubing or electrical tape, a soldering iron, solder and flux |
 | 1 x USB power cable |     |     |
 | 1 x 7 screw terminal block pins |     | **Setup:** |
 | 2 x Female header pins row of 15 |     | First,  you will need to setup rules within OPNsense to block traffic as you see fit.  This is done via the OPNsense - Firewall - Automation - Filter window.   <br>  <br>On my system I have two interfaces for which I want access blocked, these are LAN and LAN\_IOT.  For this  added two rules, one like [this rule](images/rule1.jpg) to block all IPv4 traffic, and another like [this rule](images/rule2.jpg) to block all IPv6 traffic.  Of note, when setup these rules should be normally disabled.  <br>  <br>Next download the Arduino sketch and associated settings files (linked to above).   <br>  <br>After that the secret\_settings.h file will need to be updated; instructions within the file tell you how to get at the needed information.  <br>  <br>Next, build and upload the Arduino sketch to your Lilygo T-Display S3.  <br>  <br>Then physically connect the hardware (switch and power supply) as identified in the sketch.  <br>  <br>Finally, test and if everything is working as expected add the project into a case. |
