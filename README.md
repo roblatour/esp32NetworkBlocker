@@ -23,15 +23,15 @@ Well, here are two separate open source DIY projects to build your own internet 
 |     |     |     |
 | **For the hardwired control box:** |     | 1 x [LilyGo T-Display-S3 (with pins soldered to the board)](https://s.click.aliexpress.com/e/_DD2nocP) |
 | 1 x [ESP32 30 Pin (Devkit V1)](https://s.click.aliexpress.com/e/_DCGS8Nt) |     | 1 x [22mm Emergency Stop Button (1NO 1NC)](https://s.click.aliexpress.com/e/_DCbjZUF) |
-| 1 x [22mm Emergency Stop Button (1NO 1NC)](https://s.click.aliexpress.com/e/_DCbjZUF) |     | 1 x USB power source |
+| 1 x [22mm Emergency Stop Button (1NO 1NC)](https://s.click.aliexpress.com/e/_c4rGnndz) |     | 1 x USB power source |
 | 1 x [3v DPDT Relay](https://www.digikey.ca/en/products/detail/cit-relay-and-switch/J104D2C3VDC-15S/12502634) |     | 1 x USB power cable |
-| 2 x [RJ45 Connector Jacks](https://s.click.aliexpress.com/e/_DlAS6I3) |     | (optional) 1 x external LED + matching resistor |
-| 1 x  [7 screw terminal block pins](https://s.click.aliexpress.com/e/_DCMbh99) |     | (optional) 1 x [Type C jack power connector](https://s.click.aliexpress.com/e/_DkbhLqr) |
+| 2 x [RJ45 Connector Jacks](https://s.click.aliexpress.com/e/_c3Cac0sB) |     | (optional) 1 x external LED + matching resistor |
+| 1 x  [7 screw terminal block pins](https://s.click.aliexpress.com/e/_c3EAFCon) |     | (optional) 1 x [Type C jack power connector](https://s.click.aliexpress.com/e/_c38Qvydv) |
 | 2 x [Female header pins row of 15](https://s.click.aliexpress.com/e/_DeSg9p9) |     |     |
 | 1 x USB power source |     | [this open source code from Github](https://github.com/roblatour/esp32NetworkBlocker/tree/main/ArduinoCode/esp32NetworkBlockerForOPNsense) |
 | 1 x USB power cable |     |     |
 | (optional) 1 x external LED + matching resistor |     | a Firewall running [OPNsense](https://opnsense.org/) to which you have admin access |
-| (optional) 1 x [Type C jack power connector](https://s.click.aliexpress.com/e/_DkbhLqr) |     |     |
+| (optional) 1 x [Type C jack power connector](https://s.click.aliexpress.com/e/_c3AlUMht) |     |     |
 |     |     | some form of case/enclosure; [here are the open source 3D printable files designed specifically for the projects above](https://www.printables.com/model/609103) |
 | **To add an optional remote switch:** |     |     |
 | +1 x ESP32 Devkit V1 (30) pin |     | [Arduino IDE](https://www.arduino.cc/en/software) |
